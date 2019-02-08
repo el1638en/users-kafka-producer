@@ -1,4 +1,5 @@
-#Apache Kafka
+## Apache Kafka
+
 Kafka est un système de messagerie distribué développé par la fondation Apache depuis 2012.
 Kafka fonctionne en mode publish-subscirbe et conserve les données qu'il reçoit dans des topic ou catégories de données.
 Les systèmes qui publient des données dans Kafka sont appelés des `producers`.
@@ -107,7 +108,7 @@ Spring Kafka est un framework de l'écosystème Spring. Il offre une brique logi
               return new KafkaTemplate<>(userProducerFactory());
             }
           }
-        ```
+      ```
 
       - Component Spring producer d'utilisateur
 
@@ -210,48 +211,48 @@ Spring Kafka est un framework de l'écosystème Spring. Il offre une brique logi
           		return factory;
           	}
           }
-        ```
+      ```
 
       - Component Spring consumer d'utilisateur
 
-        ```java
-            @Component
-            public class UserConsumer {
+      ```java
+          @Component
+          public class UserConsumer {
 
-        	     private final Logger logger = LoggerFactory.getLogger(UserConsumer.class);
+      	     private final Logger logger = LoggerFactory.getLogger(UserConsumer.class);
 
-            	@Autowired
-            	private UserEventMapper userEventMapper;
+          	@Autowired
+          	private UserEventMapper userEventMapper;
 
-            	@Autowired
-            	private UserService userService;
+          	@Autowired
+          	private UserService userService;
 
-              @KafkaListener(topics = "${user.topic.name}", containerFactory = "userKafkaListenerContainerFactory")
-              public void userListener(UserEvent userEvent) {
-              	logger.info("Reception d'un event kafka utilisateur : {}", userEvent);
-                  userService.create(userEventMapper.eventToBean(userEvent));
-              }
+            @KafkaListener(topics = "${user.topic.name}", containerFactory = "userKafkaListenerContainerFactory")
+            public void userListener(UserEvent userEvent) {
+            	logger.info("Reception d'un event kafka utilisateur : {}", userEvent);
+                userService.create(userEventMapper.eventToBean(userEvent));
+            }
           }
-        ```
+      ```
       Le consumer appelle le service métier `userService.create(userEventMapper.eventToBean(userEvent))` qui enregistre l'utilisateur en bdd.
 
-      - Vérification des logs du micro-service `users-kafka-producer`
+      - Vérification des logs du micro-service `users-kafka-consumer`
 
-        ```
-          00:20:55 - Kafka version : 2.0.1
-          00:20:55 - Kafka commitId : fa14705e51bd2ce5
-          00:20:55 - Initializing ExecutorService
-          00:20:55 - Cluster ID: YDwAFMOJTUC7xHECEbZkYw
-          00:20:58 - [Consumer clientId=consumer-2, groupId=users] Discovered group coordinator pl-debian:9092 (id: 2147483647 rack: null)
-          00:20:58 - [Consumer clientId=consumer-2, groupId=users] Revoking previously assigned partitions []
-          00:20:58 - partitions revoked: []
-          00:20:58 - [Consumer clientId=consumer-2, groupId=users] (Re-)joining group
-          00:20:58 - [Consumer clientId=consumer-2, groupId=users] Successfully joined group with generation 1
-          00:20:58 - partitions assigned: [users-0]
-          00:22:01 - Reception d'un event kafka utilisateur : UserEvent(name=LEGBA, firstName=Eric, login=EL1638EN)
-          00:22:01 - Création de l'tilisateur User(id=null, name=LEGBA, firstName=Eric, login=EL1638EN)
-          Hibernate: select nextval ('user_seq')
-          00:22:01:665|3|statement|connection 0|url jdbc:p6spy:postgresql://localhost:5432/db_users_2|select nextval ('user_seq')|select nextval ('user_seq')
-          Hibernate: insert into t_user (u_first_name, u_login, u_name, u_password, u_id) values (?, ?, ?, ?, ?)
-          00:22:01:711|0|statement|connection 0|url jdbc:p6spy:postgresql://localhost:5432/db_users_2|insert into t_user (u_first_name, u_login, u_name, u_password, u_id) values (?, ?, ?, ?, ?)|insert into t_user (u_first_name, u_login, u_name, u_password, u_id) values ('Eric', 'EL1638EN', 'LEGBA', 'Mmdp-3366', 1)
-        ```
+      ```
+        00:20:55 - Kafka version : 2.0.1
+        00:20:55 - Kafka commitId : fa14705e51bd2ce5
+        00:20:55 - Initializing ExecutorService
+        00:20:55 - Cluster ID: YDwAFMOJTUC7xHECEbZkYw
+        00:20:58 - [Consumer clientId=consumer-2, groupId=users] Discovered group coordinator pl-debian:9092 (id: 2147483647 rack: null)
+        00:20:58 - [Consumer clientId=consumer-2, groupId=users] Revoking previously assigned partitions []
+        00:20:58 - partitions revoked: []
+        00:20:58 - [Consumer clientId=consumer-2, groupId=users] (Re-)joining group
+        00:20:58 - [Consumer clientId=consumer-2, groupId=users] Successfully joined group with generation 1
+        00:20:58 - partitions assigned: [users-0]
+        00:22:01 - Reception d'un event kafka utilisateur : UserEvent(name=LEGBA, firstName=Eric, login=EL1638EN)
+        00:22:01 - Création de l'tilisateur User(id=null, name=LEGBA, firstName=Eric, login=EL1638EN)
+        Hibernate: select nextval ('user_seq')
+        00:22:01:665|3|statement|connection 0|url jdbc:p6spy:postgresql://localhost:5432/db_users_2|select nextval ('user_seq')|select nextval ('user_seq')
+        Hibernate: insert into t_user (u_first_name, u_login, u_name, u_password, u_id) values (?, ?, ?, ?, ?)
+        00:22:01:711|0|statement|connection 0|url jdbc:p6spy:postgresql://localhost:5432/db_users_2|insert into t_user (u_first_name, u_login, u_name, u_password, u_id) values (?, ?, ?, ?, ?)
+      ```
