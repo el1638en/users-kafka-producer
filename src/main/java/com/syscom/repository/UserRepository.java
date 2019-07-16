@@ -1,4 +1,4 @@
-package com.syscom.dao;
+package com.syscom.repository;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +12,7 @@ import com.syscom.beans.User;
  * Repository pour effectuer les CRUD des utilisateurs {@link User}
  *
  */
-public interface UserDao extends CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
 	/**
 	 * Rechercher un utilisateur à partir du login.

@@ -11,28 +11,24 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
-
-import com.syscom.event.UserEvent;
 
 @Configuration
-public class KafkaUserProducerConfig {
+public class KafkaEventProducerConfig<T> {
 
-	@Value(value = "${kafka.serverAddress}")
-	private String kafkaServerAddress;
+	@Value(value = "${spring.kafka.bootstrap-servers:localhost:9092}")
+	private String bootStrapServers;
 
 	@Bean
-	public ProducerFactory<String, UserEvent> userProducerFactory() {
+	public ProducerFactory<String, T> eventProducerFactory() {
 		Map<String, Object> configProperties = new HashMap<>();
-		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServerAddress);
+		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
 		configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+		configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializerWithJTM.class);
 		return new DefaultKafkaProducerFactory<>(configProperties);
 	}
 
 	@Bean
-	public KafkaTemplate<String, UserEvent> userKafkaTemplate() {
-		return new KafkaTemplate<>(userProducerFactory());
+	public KafkaTemplate<String, T> kafkaTemplate() {
+		return new KafkaTemplate<>(eventProducerFactory());
 	}
-
 }

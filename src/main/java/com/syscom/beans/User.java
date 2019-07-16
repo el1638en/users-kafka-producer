@@ -1,6 +1,7 @@
 package com.syscom.beans;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,16 +42,25 @@ public class User implements Serializable {
 	@Column(name = "U_ID")
 	private Long id;
 
+	@NotEmpty
 	@Column(name = "U_NAME")
 	private String name;
 
+	@NotEmpty
 	@Column(name = "U_FIRST_NAME")
 	private String firstName;
 
+	@NotEmpty
 	@Column(name = "U_LOGIN")
 	private String login;
 
+	@NotEmpty
 	@Column(name = "U_PASSWORD")
 	private String password;
+
+	@NotNull
+	@Past
+	@Column(name = "U_BIRTH_DAY")
+	private LocalDate birthDay;
 
 }
