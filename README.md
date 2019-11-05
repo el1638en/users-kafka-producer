@@ -203,6 +203,7 @@ Pour plus d'informations, consulter cette [page officielle](https://kafka.apache
             }
             userRepository.save(user);
 
+            // Transformer le bean User en Event Kafka et ecrire dans le topic Kafka
             UserUpsertEvent userUpsertEvent = userUpsertEventMapper.beanToEvent(user);
             userUpsertProducer.send(userUpsertEvent.getKey(), userUpsertEvent);
           }
