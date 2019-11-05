@@ -14,6 +14,15 @@ public interface UserService {
 	void create(User user) throws BusinessException;
 
 	/**
+	 * Modification d'un utilisateur.
+	 * 
+	 * @param login
+	 * @param userDTO
+	 * @throws BusinessException
+	 */
+	User update(String login, User user) throws BusinessException;
+
+	/**
 	 * Rechercher un utilisateur à partir d'un login.
 	 * 
 	 * @param login login de l'utilisateur.

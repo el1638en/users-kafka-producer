@@ -5,6 +5,7 @@ CREATE TABLE T_USER(
   U_FIRST_NAME VARCHAR(100) NOT NULL,
   U_LOGIN VARCHAR(20) NOT NULL,
   U_PASSWORD VARCHAR(255) NOT NULL,
+  U_BIRTH_DAY DATE NOT NULL,
   PRIMARY KEY(U_ID),
   CONSTRAINT U_USER_LOGIN UNIQUE(U_LOGIN)
 );
@@ -16,6 +17,7 @@ COMMENT ON COLUMN T_USER.U_NAME IS 'Nom d''utilisateur';
 COMMENT ON COLUMN T_USER.U_FIRST_NAME IS 'Prénom d''un utilisateur';
 COMMENT ON COLUMN T_USER.U_LOGIN IS 'Login d''un utilisateur';
 COMMENT ON COLUMN T_USER.U_PASSWORD IS 'Mot de passe d''un utilisateur';
+COMMENT ON COLUMN T_USER.U_BIRTH_DAY IS 'Date de naissance de l'' utilisateur';
 
 -- Création d'une sequence pour gérer les identifiants techniques des utilisateurs
 CREATE SEQUENCE USER_SEQ

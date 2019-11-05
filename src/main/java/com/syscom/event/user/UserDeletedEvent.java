@@ -1,7 +1,6 @@
-package com.syscom.dto;
+package com.syscom.event.user;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import com.syscom.event.AbstractEvent;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,25 +11,22 @@ import lombok.ToString;
 
 @Data
 @Builder
-@ToString(exclude = { "password" })
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {})
-public class UserDTO implements Serializable {
+@EqualsAndHashCode(callSuper = false)
+public class UserDeletedEvent extends AbstractEvent {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	private String name;
-
-	private String firstName;
 
 	private String login;
 
-	private String password;
-	
-	private LocalDate birthDay;
+	@Override
+	public String getKey() {
+		return this.getClass().getSimpleName();
+	}
 
 }
