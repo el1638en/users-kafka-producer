@@ -6,12 +6,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.syscom.beans.User;
+import org.springframework.stereotype.Repository;
 
 /**
  * 
  * Repository pour effectuer les CRUD des utilisateurs {@link User}
  *
  */
+@Repository
 public interface UserRepository extends CrudRepository<User, Long> {
 
 	/**

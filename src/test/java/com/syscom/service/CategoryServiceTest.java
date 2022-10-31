@@ -3,7 +3,7 @@ package com.syscom.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -71,8 +71,8 @@ public class CategoryServiceTest extends AbstractTest {
 		categoryService.create(null);
 
 		// THEN
-		verifyZeroInteractions(categoryRepository);
-		verifyZeroInteractions(categoryEventProducer);
+		verifyNoInteractions(categoryRepository);
+		verifyNoInteractions(categoryEventProducer);
 
 	}
 
@@ -85,8 +85,8 @@ public class CategoryServiceTest extends AbstractTest {
 		categoryService.create(new Category());
 
 		// THEN
-		verifyZeroInteractions(categoryRepository);
-		verifyZeroInteractions(categoryEventProducer);
+		verifyNoInteractions(categoryRepository);
+		verifyNoInteractions(categoryEventProducer);
 	}
 
 	@Test

@@ -10,7 +10,6 @@ import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +27,7 @@ import com.syscom.producer.user.UserDeletedProducer;
 import com.syscom.producer.user.UserUpsertProducer;
 import com.syscom.repository.UserRepository;
 import com.syscom.service.UserService;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Implémentation du contrat d'interface des services métiers des utilisateurs
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
 		ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
 		Validator validator = validatorFactory.getValidator();
 		Set<ConstraintViolation<User>> constraintViolations = validator.validate(user);
-		if (CollectionUtils.isNotEmpty(constraintViolations)) {
+		if (!CollectionUtils.isEmpty(constraintViolations)) {
 			return constraintViolations.stream()
 					.map(violation -> violation.getPropertyPath() + StringUtils.SPACE + violation.getMessage())
 					.collect(Collectors.toList());

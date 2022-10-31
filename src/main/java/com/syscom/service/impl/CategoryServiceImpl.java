@@ -9,7 +9,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +26,7 @@ import com.syscom.producer.category.CategoryDeletedProducer;
 import com.syscom.producer.category.CategoryUpsertProducer;
 import com.syscom.repository.CategoryRepository;
 import com.syscom.service.CategoryService;
+import org.springframework.util.CollectionUtils;
 
 /**
  * Implémentation du contrat d'interface des services métiers des catégories
@@ -90,7 +90,7 @@ public class CategoryServiceImpl implements CategoryService {
 	private List<String> validateCategory(Category category) {
 		Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 		Set<ConstraintViolation<Category>> constraintViolations = validator.validate(category);
-		if (CollectionUtils.isNotEmpty(constraintViolations)) {
+		if (!CollectionUtils.isEmpty(constraintViolations)) {
 			return constraintViolations.stream()
 					.map(violation -> violation.getPropertyPath() + StringUtils.SPACE + violation.getMessage())
 					.collect(Collectors.toList());
