@@ -1,13 +1,11 @@
 package com.syscom.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
+import com.syscom.AbstractTest;
+import com.syscom.beans.Category;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.syscom.AbstractTest;
-import com.syscom.beans.Category;
-import com.syscom.repository.CategoryRepository;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class CategoryRepositoryTest extends AbstractTest {
 
@@ -18,7 +16,7 @@ public class CategoryRepositoryTest extends AbstractTest {
 	private CategoryRepository categoryRepository;
 
 	@Test
-	public void testExistsCategoryByCode() throws Exception {
+	public void testExistsCategoryByCode() {
 		// GIVEN
 		Category category = Category.builder().code(CODE).libelle(LIBELLE).build();
 		categoryRepository.save(category);
@@ -32,7 +30,7 @@ public class CategoryRepositoryTest extends AbstractTest {
 	}
 
 	@Test
-	public void testExistsCategoryByWrongCode() throws Exception {
+	public void testExistsCategoryByWrongCode() {
 		// GIVEN
 		Category category = Category.builder().code(CODE).libelle(LIBELLE).build();
 		categoryRepository.save(category);

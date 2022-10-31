@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.syscom.AbstractTest;
 import com.syscom.beans.User;
-import com.syscom.repository.UserRepository;
 
 public class UserRepositoryTest extends AbstractTest {
 
@@ -15,7 +14,7 @@ public class UserRepositoryTest extends AbstractTest {
 	private UserRepository userRepository;
 
 	@Test
-	public void testFindByLogin() throws Exception {
+	public void testFindByLogin() {
 		// GIVEN
 		userRepository.save(getUser());
 
@@ -31,7 +30,7 @@ public class UserRepositoryTest extends AbstractTest {
 	}
 
 	@Test
-	public void testDeleteByLogin() throws Exception {
+	public void testDeleteByLogin() {
 		// GIVEN
 		userRepository.save(getUser());
 

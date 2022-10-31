@@ -1,10 +1,13 @@
 package com.syscom.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
+import com.syscom.AbstractTest;
+import com.syscom.beans.User;
+import com.syscom.event.user.UserDeletedEvent;
+import com.syscom.event.user.UserUpsertEvent;
+import com.syscom.exceptions.BusinessException;
+import com.syscom.producer.user.UserDeletedProducer;
+import com.syscom.producer.user.UserUpsertProducer;
+import com.syscom.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,14 +17,10 @@ import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.syscom.AbstractTest;
-import com.syscom.beans.User;
-import com.syscom.event.user.UserDeletedEvent;
-import com.syscom.event.user.UserUpsertEvent;
-import com.syscom.exceptions.BusinessException;
-import com.syscom.producer.user.UserDeletedProducer;
-import com.syscom.producer.user.UserUpsertProducer;
-import com.syscom.repository.UserRepository;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 public class UserServiceTest extends AbstractTest {
 
@@ -66,8 +65,8 @@ public class UserServiceTest extends AbstractTest {
 		userService.create(null);
 
 		// THEN
-		verifyZeroInteractions(userRepository);
-		verifyZeroInteractions(userUpsertProducer);
+		verifyNoInteractions(userRepository);
+		verifyNoInteractions(userUpsertProducer);
 
 	}
 
@@ -80,8 +79,8 @@ public class UserServiceTest extends AbstractTest {
 		userService.create(new User());
 
 		// THEN
-		verifyZeroInteractions(userRepository);
-		verifyZeroInteractions(userUpsertProducer);
+		verifyNoInteractions(userRepository);
+		verifyNoInteractions(userUpsertProducer);
 	}
 
 	@Test

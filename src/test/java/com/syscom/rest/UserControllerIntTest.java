@@ -1,19 +1,18 @@
 package com.syscom.rest;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
 import com.syscom.beans.User;
 import com.syscom.dto.UserDTO;
 import com.syscom.mapper.dto.UserMapper;
 import com.syscom.producer.user.UserDeletedProducer;
 import com.syscom.producer.user.UserUpsertProducer;
 import com.syscom.service.UserService;
+import org.junit.Before;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 public class UserControllerIntTest extends AbstractIntTest {
 

@@ -7,41 +7,17 @@ Pour plus d'informations, consulter cette [page officielle](https://kafka.apache
 
 1. Installation
 
-    1. Environnement
+   1. Pré-requis
+   
+    Vous devez disposer de `docker-compose` sur votre machine. Pour l'installer, consulter cette [page officielle](https://docs.docker.com/compose/install/other/).
+
+   2. Installation
 
     ```
-    root@pl-debian:~# uname -a
-    Linux pl-debian 4.9.0-8-amd64 #1 SMP Debian 4.9.110-3+deb9u6 (2018-10-08) x86_64 GNU/Linux
-    root@pl-debian:~# lsb_release -a
-    No LSB modules are available.
-    Distributor ID: Debian
-    Description:    Debian GNU/Linux 9.5 (stretch)
-    Release:        9.5
-    Codename:       stretch
+        root@pl-debian:~# cd src/main/resources && docker-compose up -d
     ```
 
-    2. Télécharger et dézipper Kafka
-
-    ```
-    root@pl-debian:~# cd /opt
-    root@pl-debian:/opt# wget http://apache.mirrors.benatherton.com/kafka/2.1.0/kafka_2.11-2.1.0.tgz
-    root@pl-debian:/opt# tar -zxf kafka_2.11-2.1.0.tgz
-    root@pl-debian:/opt# cd kafka_2.11-2.1.0
-    ```
-
-    3. Démarrer zookeeper
-
-    ```
-    root@pl-debian:/opt/kafka_2.11-2.1.0# bin/zookeeper-server-start.sh config/zookeeper.properties
-    ```
-
-    4. Démarrer le serveur kafka
-
-    ```
-    root@pl-debian-1:/opt/kafka_2.11-2.1.0# bin/kafka-server-start.sh config/server.properties
-    ```
-
-3. [Spring Kafka](https://spring.io/projects/spring-kafka)
+2. [Spring Kafka](https://spring.io/projects/spring-kafka)
 
 [Spring Kafka](https://spring.io/projects/spring-kafka) est un framework de l'écosystème [Spring](https://spring.io/). Il offre une brique logicielle permettant de produire et de lire des données dans un serveur Kafka. Dans l'exemple qui suit, nous allons utiliser 2 applications Spring Boot :
   - le micro-service `users-kafka-producer` écrit dans un topic kafka les informations des
@@ -51,7 +27,7 @@ Pour plus d'informations, consulter cette [page officielle](https://kafka.apache
     1. Création du topic kafka `users-upsert`
 
     ```
-    root@pl-debian:/opt/kafka_2.11-2.1.0# bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic users-upsert
+    docker exec broker kafka-topics --bootstrap-server broker:9092 --create --topic users-upsert
     ```
 
     2. `users-kafka-producer`
@@ -62,27 +38,26 @@ Pour plus d'informations, consulter cette [page officielle](https://kafka.apache
         qui définit la stratégie de création des producers
 
       ```java
-          @Configuration
-          public class KafkaEventProducerConfig<T> {
-
-        // Configuration de l'adresse du serveur Kafka.
-		    @Value(value = "${spring.kafka.bootstrap-servers:localhost:9092}")
-		    private String bootStrapServers;
-
-		    @Bean
-		    public ProducerFactory<String, T> eventProducerFactory() {
-		        Map<String, Object> configProperties = new HashMap<>();
-		        configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
-		        configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-		        configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializerWithJTM.class);
-		        return new DefaultKafkaProducerFactory<>(configProperties);
-		    }
-
-		    @Bean
-		    public KafkaTemplate<String, T> kafkaTemplate() {
-		        return new KafkaTemplate<>(eventProducerFactory());
-		    }
-        }
+         @Configuration
+         public class KafkaEventProducerConfig<T> {
+         
+         	@Value(value = "${spring.kafka.bootstrap-servers:localhost:9092}")
+         	private String bootStrapServers;
+         
+         	@Bean
+         	public ProducerFactory<String, T> eventProducerFactory() {
+         		Map<String, Object> configProperties = new HashMap<>();
+         		configProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootStrapServers);
+         		configProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+         		configProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+         		return new DefaultKafkaProducerFactory<>(configProperties);
+         	}
+         
+         	@Bean
+         	public KafkaTemplate<String, T> kafkaTemplate() {
+         		return new KafkaTemplate<>(eventProducerFactory());
+         	}
+         }
       ```
 
       Les objets Java sont sérailisés au format JSON se fait avec `JsonSerializerWithJTM` qui étend de `JsonSerializer` auquel on ajoute le

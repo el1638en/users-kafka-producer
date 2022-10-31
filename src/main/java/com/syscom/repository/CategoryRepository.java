@@ -6,12 +6,14 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import com.syscom.beans.Category;
+import org.springframework.stereotype.Repository;
 
 /**
  * 
  * Repository pour effectuer les CRUD des categories {@link Category}
  *
  */
+@Repository
 public interface CategoryRepository extends CrudRepository<Category, Long> {
 
 	boolean existsCategoryByCode(String code);
